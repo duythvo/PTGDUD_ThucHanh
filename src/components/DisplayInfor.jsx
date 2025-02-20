@@ -22,7 +22,7 @@ const DisplayInfor = (props) => {
 
   useEffect(() => {
     if (listUser.length === 0) {
-      alert("Danh sách người dùng chỉ còn 1 người");
+      alert("Danh sách người dùng sẽ rỗng");
     }
   }, [listUser]);
 
@@ -37,6 +37,8 @@ const DisplayInfor = (props) => {
         >
           {isShowHideListUser === true ? "Hide list User" : "Show list User"}
         </span>
+        <span className="bg-blue-800 text-white mt-5 p-2 rounded cursor-pointer"
+        onClick={() => props.handleDeleteAllUser()}>Delete All</span>
       </div>
       {isShowHideListUser === true ? (
         <ul className="flex flex-col justify-center items-center">

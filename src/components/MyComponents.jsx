@@ -23,6 +23,10 @@ const MyComponents = (props) => {
     setListUser(listUserClone);
   };
 
+  const handleDeleteAllUser = () => {
+    setListUser([]);
+  };
+
   return (
     <div>
       <AddUserInfor handleAddnewUser={handleAddnewUser} />
@@ -31,7 +35,11 @@ const MyComponents = (props) => {
       via-yellow-500 via-blue-500 via-green-500 via-purple-500
       to-pink-500 border-0"
       />
-      <DisplayInfor listUser={listUser} handleDeleteUser={handleDeleteUser} />
+      <DisplayInfor
+        listUser={listUser}
+        handleDeleteUser={handleDeleteUser}
+        handleDeleteAllUser={handleDeleteAllUser}
+      />
     </div>
   );
 };
