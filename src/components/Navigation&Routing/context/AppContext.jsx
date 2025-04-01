@@ -1,13 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { listUsers } from "../../../assets/assets";
 
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const [listUser, setListUser] = useState([]);
-
   const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
@@ -19,7 +17,7 @@ const AppContextProvider = (props) => {
       const res = await axios.get("https://jsonplaceholder.typicode.com/users");
       setListUser(res.data);
     } catch (err) {
-      toast.error(err.message);
+      toast.error("Không thể tải dữ liệu người dùng. Vui lòng thử lại.");
     }
   };
 

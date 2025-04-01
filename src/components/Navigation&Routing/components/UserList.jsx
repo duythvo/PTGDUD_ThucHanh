@@ -1,18 +1,51 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
+import { FaSearch } from "react-icons/fa"; 
+import { FaSpinner } from "react-icons/fa"; 
 
 const UserList = () => {
   const navigate = useNavigate();
   const { listUser, theme, toggleTheme } = useContext(AppContext);
 
-  if (listUser.length === 0) {
-    return <p>Đang tải danh sách người dùng...</p>;
-  }
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);  
+  const usersPerPage = 5;
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredUsers = listUser.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    if (listUser.length > 0) {
+      setLoading(false);
+    }
+  }, [listUser]);
 
   const reLoadAPI = () => {
+    setLoading(true); 
     window.location.reload();
   };
+
+  if (listUser.length === 0 && loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <FaSpinner className="animate-spin text-4xl text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -38,36 +71,80 @@ const UserList = () => {
         </div>
       </div>
 
-      <table className="table-fixed w-[98%] border-b border-gray-700 mx-5">
-        <thead>
-          <tr className={theme === "dark" ? "bg-gray-900" : "bg-gray-200"}>
-            <th className="py-4 px-3 border-b text-start text-sm">Name</th>
-            <th className="py-3 px-3 border-b text-start text-sm">Website</th>
-            <th className="py-3 px-3 border-b text-start text-sm">Email</th>
-            <th className="border-b text-start text-sm">Company</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listUser.map((user) => (
+      {/* Search Bar */}
+      <div className="p-4">
+        <div className="flex items-center bg-gray-200 rounded-lg p-2">
+          <FaSearch className="text-gray-500 mr-2" />
+          <input
+            type="text"
+            placeholder="Tìm kiếm người dùng..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full bg-transparent text-black focus:outline-none"
+          />
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto px-5 py-6">
+        <table className="table-auto w-full text-sm">
+          <thead>
             <tr
-              key={user.id}
-              onClick={() => navigate(`/user/${user.id}`)}
-              className={` transition cursor-pointer text-start ${
-                theme === "dark"
-                  ? "bg-gray-900 text-white hover:bg-blue-100 hover:text-black"
-                  : "bg-white text-black hover:bg-gray-200"
-              }`}
+              className={`${
+                theme === "dark" ? "bg-gray-800" : "bg-gray-200"
+              } text-left text-sm`}
             >
-              <td className="py-3 px-3 border-b text-sm font-bold">
-                {user.name}
-              </td>
-              <td className="py-3 px-3 border-b text-sm">{user.website}</td>
-              <td className="py-3 px-3 border-b text-sm">{user.email}</td>
-              <td className="py-3 border-b text-sm">{user.company.name}</td>
+              <th className="py-3 px-4">Hình ảnh</th>
+              <th className="py-3 px-4">Tên</th>
+              <th className="py-3 px-4">Website</th>
+              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">Công ty</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentUsers.map((user) => (
+              <tr
+                key={user.id}
+                onClick={() => navigate(`/user/${user.id}`)}
+                className={`cursor-pointer hover:bg-blue-100 ${
+                  theme === "dark"
+                    ? "bg-gray-900 text-white hover:bg-pink-100 hover:text-black"
+                    : "bg-white text-black hover:bg-gray-200"
+                }`}
+              >
+                <td className="py-3 px-4 text-center">
+                  <img
+                    src={`https://i.pravatar.cc/150?img=${user.id}`}
+                    alt={user.name}
+                    className="w-12 h-12 rounded-full object-cover mx-auto"
+                  />
+                </td>
+                <td className="py-3 px-4">{user.name}</td>
+                <td className="py-3 px-4">{user.website}</td>
+                <td className="py-3 px-4">{user.email}</td>
+                <td className="py-3 px-4">{user.company.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center gap-2 py-4">
+        {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => paginate(index + 1)}
+            className={`${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-300 text-black"
+            } px-4 py-2 rounded-md transition hover:bg-blue-400`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
