@@ -14,17 +14,13 @@ const AppContextProvider = (props) => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  //   const getUserList = async () => {
-  //     try {
-  //       const res = await axios.get("https://jsonplaceholder.typicode.com/users");
-  //       setListUser(res.data);
-  //     } catch (err) {
-  //       toast.error(err.message);
-  //     }
-  //   };
-
-  const getUserList = () => {
-    setListUser(listUsers);
+  const getUserList = async () => {
+    try {
+      const res = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setListUser(res.data);
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   useEffect(() => {

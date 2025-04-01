@@ -10,16 +10,32 @@ const UserList = () => {
     return <p>Đang tải danh sách người dùng...</p>;
   }
 
+  const reLoadAPI = () => {
+    window.location.reload();
+  };
+
   return (
-    <div className={`mx-4 sm:mx-[10%] rounded-2xl ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
+    <div
+      className={`mx-4 sm:mx-[10%] rounded-2xl ${
+        theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
+      }`}
+    >
       <div className="flex justify-between items-center p-6">
         <h1 className="font-bold text-xl">Danh sách người dùng</h1>
-        <button
-          onClick={toggleTheme}
-          className="px-4 py-2 rounded-lg transition bg-blue-500 text-white font-bold cursor-pointer hover:bg-blue-600"
-        >
-          {theme === "dark" ? "Chế độ sáng" : "Chế độ tối"}
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={toggleTheme}
+            className="px-4 py-2 rounded-lg transition bg-blue-500 text-white font-bold cursor-pointer hover:bg-blue-600"
+          >
+            {theme === "dark" ? "Chế độ sáng" : "Chế độ tối"}
+          </button>
+          <button
+            onClick={reLoadAPI}
+            className="px-4 py-2 rounded-lg transition bg-blue-400 text-white font-bold cursor-pointer hover:bg-blue-600"
+          >
+            Reload
+          </button>
+        </div>
       </div>
 
       <table className="table-fixed w-[98%] border-b border-gray-700 mx-5">
@@ -36,7 +52,11 @@ const UserList = () => {
             <tr
               key={user.id}
               onClick={() => navigate(`/user/${user.id}`)}
-              className={`hover:bg-pink-500 transition cursor-pointer text-start ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black hover:bg-gray-300"}`}
+              className={` transition cursor-pointer text-start ${
+                theme === "dark"
+                  ? "bg-gray-900 text-white hover:bg-blue-100 hover:text-black"
+                  : "bg-white text-black hover:bg-gray-200"
+              }`}
             >
               <td className="py-3 px-3 border-b text-sm font-bold">
                 {user.name}

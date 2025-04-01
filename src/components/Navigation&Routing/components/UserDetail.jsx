@@ -17,14 +17,8 @@ const UserDetail = () => {
     <div className="max-w-2xl mx-auto bg-gray-900 text-white p-6 rounded-lg shadow-lg mt-10">
       <h2 className="text-3xl font-semibold text-center mb-4">{user.name}</h2>
 
-      <div className="flex flex-col sm:flex-row items-center justify-items-center-center gap-6">
-        <img
-          src={user.image}
-          alt={user.name}
-          className="w-[50%] h-[50%] rounded border-4 border-gray-700 shadow-lg object-cover"
-        />
-
-        <div className="space-y-3 flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row items-center justify-items-center gap-6"> 
+        <div className="space-y-3 flex flex-col gap-5 ">
           <p>
             <span className="font-semibold">Email:</span> {user.email}
           </p>
